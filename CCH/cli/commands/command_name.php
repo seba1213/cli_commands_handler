@@ -1,8 +1,8 @@
 <?php
 /**
- * Класс команды command_name
+ * РљР»Р°СЃСЃ РєРѕРјР°РЅРґС‹ command_name
  * 
- * Реализовано согласно техническому заданию.
+ * Р РµР°Р»РёР·РѕРІР°РЅРѕ СЃРѕРіР»Р°СЃРЅРѕ С‚РµС…РЅРёС‡РµСЃРєРѕРјСѓ Р·Р°РґР°РЅРёСЋ.
  * 
  * @copyright 2021 Sevastyan Stepanov <seba13@mail.ru>
  * @package cli_commands_handler
@@ -10,7 +10,7 @@
 class command_name implements \command_base
 {
     /**
-     * Дерево параметров
+     * Р”РµСЂРµРІРѕ РїР°СЂР°РјРµС‚СЂРѕРІ
      * 
      * @var array
      */
@@ -57,10 +57,10 @@ class command_name implements \command_base
     }
     
     /**
-     * Рекурсивно строит дерево параметров
+     * Р РµРєСѓСЂСЃРёРІРЅРѕ СЃС‚СЂРѕРёС‚ РґРµСЂРµРІРѕ РїР°СЂР°РјРµС‚СЂРѕРІ
      * 
      * @param object $params
-     * @param number $level определяет отступ в зависимости от глубины вложенности параметров
+     * @param number $level РѕРїСЂРµРґРµР»СЏРµС‚ РѕС‚СЃС‚СѓРї РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РіР»СѓР±РёРЅС‹ РІР»РѕР¶РµРЅРЅРѕСЃС‚Рё РїР°СЂР°РјРµС‚СЂРѕРІ
      */
     private function tree($params, $level = 0) {
         $tab = function($level) {

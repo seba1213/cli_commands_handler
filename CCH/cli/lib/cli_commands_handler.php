@@ -4,8 +4,8 @@ require_once  __DIR__ . '/command_base.php';
 /**
  * Cli Commands Handler
  * 
- * Обеспечивает обработку ввода-вывода (I/O) при работе в консоли, 
- * предотавляет возможность реализовать собственные команды
+ * РћР±РµСЃРїРµС‡РёРІР°РµС‚ РѕР±СЂР°Р±РѕС‚РєСѓ РІРІРѕРґР°-РІС‹РІРѕРґР° (I/O) РїСЂРё СЂР°Р±РѕС‚Рµ РІ РєРѕРЅСЃРѕР»Рё, 
+ * РїСЂРµРґРѕС‚Р°РІР»СЏРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СЂРµР°Р»РёР·РѕРІР°С‚СЊ СЃРѕР±СЃС‚РІРµРЅРЅС‹Рµ РєРѕРјР°РЅРґС‹
  * 
  * @copyright 2021 Sevastyan Stepanov <seba13@mail.ru>
  * @package cli_commands_handler
@@ -13,21 +13,21 @@ require_once  __DIR__ . '/command_base.php';
 class cli_commands_handler
 {
     /**
-     * Параметры
+     * РџР°СЂР°РјРµС‚СЂС‹
      * 
      * @var object
      */
     protected $params;
     
     /**
-     * Аргуметы
+     * РђСЂРіСѓРјРµС‚С‹
      * 
      * @var array
      */
     protected $args = [];
     
     /**
-     * Исполняемая команда
+     * РСЃРїРѕР»РЅСЏРµРјР°СЏ РєРѕРјР°РЅРґР°
      * 
      * @var string
      */
@@ -35,29 +35,29 @@ class cli_commands_handler
 
     /**
      * 
-     * @param string $path - путь до папки с классами команд
-     * @param string $description - переопределяемое описание для приложения, 
-     * отображается если приложение вызвано без указания конкретной команды.
+     * @param string $path - РїСѓС‚СЊ РґРѕ РїР°РїРєРё СЃ РєР»Р°СЃСЃР°РјРё РєРѕРјР°РЅРґ
+     * @param string $description - РїРµСЂРµРѕРїСЂРµРґРµР»СЏРµРјРѕРµ РѕРїРёСЃР°РЅРёРµ РґР»СЏ РїСЂРёР»РѕР¶РµРЅРёСЏ, 
+     * РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ РµСЃР»Рё РїСЂРёР»РѕР¶РµРЅРёРµ РІС‹Р·РІР°РЅРѕ Р±РµР· СѓРєР°Р·Р°РЅРёСЏ РєРѕРЅРєСЂРµС‚РЅРѕР№ РєРѕРјР°РЅРґС‹.
      */
     public function __construct(string $path, string $description = null)
     {
         $this->description = $description;
         $this->params = new stdClass();
-        // Получает экземпляры классов комманд в указанной приложением папке
+        // РџРѕР»СѓС‡Р°РµС‚ СЌРєР·РµРјРїР»СЏСЂС‹ РєР»Р°СЃСЃРѕРІ РєРѕРјРјР°РЅРґ РІ СѓРєР°Р·Р°РЅРЅРѕР№ РїСЂРёР»РѕР¶РµРЅРёРµРј РїР°РїРєРµ
         $commands = $this->get_command_insts_by_patch($path);
-        // Разберает переданные параметры запуска приложения, 
-        // заполняет соответствующие свойства класса
+        // Р Р°Р·Р±РµСЂР°РµС‚ РїРµСЂРµРґР°РЅРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РїСѓСЃРєР° РїСЂРёР»РѕР¶РµРЅРёСЏ, 
+        // Р·Р°РїРѕР»РЅСЏРµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ СЃРІРѕР№СЃС‚РІР° РєР»Р°СЃСЃР°
         try {
             $this->process_params($commands);
         } catch (\Exception $e) {
             $this->cli_writeln($e->getMessage());
             exit(0);
         }
-        // Выполняет логику приложения
+        // Р’С‹РїРѕР»РЅСЏРµС‚ Р»РѕРіРёРєСѓ РїСЂРёР»РѕР¶РµРЅРёСЏ
         $cliresponse = $commands[$this->command]->process(
             $this->args, $this->params, $this->command
             );
-        // Печать результата выполнения
+        // РџРµС‡Р°С‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚Р° РІС‹РїРѕР»РЅРµРЅРёСЏ
         if (is_array($cliresponse)) {
             foreach ($cliresponse as $str) {
                 $this->cli_writeln((string)$str); 
@@ -68,7 +68,7 @@ class cli_commands_handler
     }
     
     /**
-     * Выводит описание всех или переданной команд
+     * Р’С‹РІРѕРґРёС‚ РѕРїРёСЃР°РЅРёРµ РІСЃРµС… РёР»Рё РїРµСЂРµРґР°РЅРЅРѕР№ РєРѕРјР°РЅРґ
      * 
      * @param array $commands
      * @param string $commandstr
@@ -76,7 +76,7 @@ class cli_commands_handler
      */
     private function print_commands_descriptions(array $commands, string $commandstr = null) {
         if (is_null($commandstr)) {
-            // Вывод описания приложения
+            // Р’С‹РІРѕРґ РѕРїРёСЃР°РЅРёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
             if ($this->description) {
                 $this->cli_writeln((string)$this->description);
             } else {
@@ -86,7 +86,7 @@ class cli_commands_handler
                 $string = get_class($commandinst) . ' - ' . $commandinst->description();
                 $this->cli_writeln($string);
             }
-        } else { // Передана конкретная команда, будем выводить только ее описание.
+        } else { // РџРµСЂРµРґР°РЅР° РєРѕРЅРєСЂРµС‚РЅР°СЏ РєРѕРјР°РЅРґР°, Р±СѓРґРµРј РІС‹РІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РµРµ РѕРїРёСЃР°РЅРёРµ.
             if (!array_key_exists($commandstr, $commands)) {
                 throw new \Exception("There is no command '$commandstr'");
             }
@@ -96,7 +96,7 @@ class cli_commands_handler
     }
     
     /**
-     * Экземпляры классов команд в указанной директории
+     * Р­РєР·РµРјРїР»СЏСЂС‹ РєР»Р°СЃСЃРѕРІ РєРѕРјР°РЅРґ РІ СѓРєР°Р·Р°РЅРЅРѕР№ РґРёСЂРµРєС‚РѕСЂРёРё
      * 
      * @param string $path
      * @return command_base[]
@@ -123,7 +123,7 @@ class cli_commands_handler
     }   
     
     /**
-     * Обработчик параметров и аргументов
+     * РћР±СЂР°Р±РѕС‚С‡РёРє РїР°СЂР°РјРµС‚СЂРѕРІ Рё Р°СЂРіСѓРјРµРЅС‚РѕРІ
      * 
      * @param array $commands
      * @throws \Exception
@@ -136,7 +136,7 @@ class cli_commands_handler
             throw new \Exception('Error of the server variable "argv"');
         }
         $rawoptions = $_SERVER['argv'];
-        // Определяет переданную команду
+        // РћРїСЂРµРґРµР»СЏРµС‚ РїРµСЂРµРґР°РЅРЅСѓСЋ РєРѕРјР°РЅРґСѓ
         $this->command = $this->exclude_command_from_raw($rawoptions);
         if ($this->command === false) {
             $this->print_commands_descriptions($commands);
@@ -149,14 +149,14 @@ class cli_commands_handler
             $this->print_commands_descriptions($commands, $this->command);
             exit(0);
         }
-        // Обработаем параметры полученные из приложения
+        // РћР±СЂР°Р±РѕС‚Р°РµРј РїР°СЂР°РјРµС‚СЂС‹ РїРѕР»СѓС‡РµРЅРЅС‹Рµ РёР· РїСЂРёР»РѕР¶РµРЅРёСЏ
         foreach ($rawoptions as $rawoption) {
             $this->set_parameters_from_string($rawoption, $this->params);
         }  
     }
 
     /**
-     * Рекурсивно разбирает переданные параметры с дальнейшей записью в свойства класса
+     * Р РµРєСѓСЂСЃРёРІРЅРѕ СЂР°Р·Р±РёСЂР°РµС‚ РїРµСЂРµРґР°РЅРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ СЃ РґР°Р»СЊРЅРµР№С€РµР№ Р·Р°РїРёСЃСЊСЋ РІ СЃРІРѕР№СЃС‚РІР° РєР»Р°СЃСЃР°
      * 
      * @param string $rawoption
      * @param object $params
@@ -164,39 +164,39 @@ class cli_commands_handler
     private function set_parameters_from_string(string $rawoption, $params) {
         $subparam = null;
         $matches = $submatches = [];
-        // Патерн позволяет разделить аргументы и параметры
+        // РџР°С‚РµСЂРЅ РїРѕР·РІРѕР»СЏРµС‚ СЂР°Р·РґРµР»РёС‚СЊ Р°СЂРіСѓРјРµРЅС‚С‹ Рё РїР°СЂР°РјРµС‚СЂС‹
         $pattern = '/^\[([^=]+)=(.+)\]$/';
         if (preg_match($pattern, $rawoption, $matches)) {
-            // Проверим является ли значение параметра сабпараметром
+            // РџСЂРѕРІРµСЂРёРј СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р·РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° СЃР°Р±РїР°СЂР°РјРµС‚СЂРѕРј
             if (preg_match($pattern, $matches[2], $submatches)) {
-                // Определим сушествование сабпараметра чтобы не создавать новый
+                // РћРїСЂРµРґРµР»РёРј СЃСѓС€РµСЃС‚РІРѕРІР°РЅРёРµ СЃР°Р±РїР°СЂР°РјРµС‚СЂР° С‡С‚РѕР±С‹ РЅРµ СЃРѕР·РґР°РІР°С‚СЊ РЅРѕРІС‹Р№
                 foreach ($params->{$matches[1]} as $param) {
                     if (property_exists($param, $submatches[1])) {
                         $subparam = $param;
                         break;
                     }
                 }
-                if (is_null($subparam)) {// Сабпараметр отсутствует, создадим новый
+                if (is_null($subparam)) {// РЎР°Р±РїР°СЂР°РјРµС‚СЂ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚, СЃРѕР·РґР°РґРёРј РЅРѕРІС‹Р№
                     $subparam = $params->{$matches[1]}[] = new stdClass();
                 }
-                // Выполним метод рекурсивно, передаем обьект для заполнения по ссылке
+                // Р’С‹РїРѕР»РЅРёРј РјРµС‚РѕРґ СЂРµРєСѓСЂСЃРёРІРЅРѕ, РїРµСЂРµРґР°РµРј РѕР±СЊРµРєС‚ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ РїРѕ СЃСЃС‹Р»РєРµ
                 $this->set_parameters_from_string($matches[2], $subparam);
-            } else {// Значение параметра не является сабпараметром
+            } else {// Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° РЅРµ СЏРІР»СЏРµС‚СЃСЏ СЃР°Р±РїР°СЂР°РјРµС‚СЂРѕРј
                 $params->{$matches[1]}[] = $matches[2];
             }
-        } else { // Передан аргумент, обработаем и запишем в соответствующее свойство класса
+        } else { // РџРµСЂРµРґР°РЅ Р°СЂРіСѓРјРµРЅС‚, РѕР±СЂР°Р±РѕС‚Р°РµРј Рё Р·Р°РїРёС€РµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СЃРІРѕР№СЃС‚РІРѕ РєР»Р°СЃСЃР°
             $this->set_argumets_from_string($rawoption);
         }
     }
     
     /**
-     * Записывает аргументы в соответствующее свойство класса
+     * Р—Р°РїРёСЃС‹РІР°РµС‚ Р°СЂРіСѓРјРµРЅС‚С‹ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СЃРІРѕР№СЃС‚РІРѕ РєР»Р°СЃСЃР°
      * 
      * @param string $rawoption
      */
     private function set_argumets_from_string(string $rawoption) {
         $matches = [];
-        // Если аргумент одиночный то он возвращается в скобках, уберем их
+        // Р•СЃР»Рё Р°СЂРіСѓРјРµРЅС‚ РѕРґРёРЅРѕС‡РЅС‹Р№ С‚Рѕ РѕРЅ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РІ СЃРєРѕР±РєР°С…, СѓР±РµСЂРµРј РёС…
         if (preg_match('/{(.+)}/', $rawoption, $matches)) {
             $rawoption = $matches[1];
         }
@@ -204,23 +204,23 @@ class cli_commands_handler
     }
     
     /**
-     * Вычитает из сырого массива название команды, 
-     * также удаляет имя исполняемого скрипта
+     * Р’С‹С‡РёС‚Р°РµС‚ РёР· СЃС‹СЂРѕРіРѕ РјР°СЃСЃРёРІР° РЅР°Р·РІР°РЅРёРµ РєРѕРјР°РЅРґС‹, 
+     * С‚Р°РєР¶Рµ СѓРґР°Р»СЏРµС‚ РёРјСЏ РёСЃРїРѕР»РЅСЏРµРјРѕРіРѕ СЃРєСЂРёРїС‚Р°
      * 
      * @param array $rawoptions
      * @throws \Exception
-     * @return string имя исполняемой команды
+     * @return string РёРјСЏ РёСЃРїРѕР»РЅСЏРµРјРѕР№ РєРѕРјР°РЅРґС‹
      */
     private function exclude_command_from_raw(array &$rawoptions) {
-        // Содержит имя выполняемого фаила - удалим из массива
+        // РЎРѕРґРµСЂР¶РёС‚ РёРјСЏ РІС‹РїРѕР»РЅСЏРµРјРѕРіРѕ С„Р°РёР»Р° - СѓРґР°Р»РёРј РёР· РјР°СЃСЃРёРІР°
         unset($rawoptions[0]);
         if (!isset($rawoptions[1])) {
             return false;
         }
         $command = $rawoptions[1];
         unset ($rawoptions[1]);
-        // Команда определяется названием класса, проверим на допустимые символы, также определим
-        // что команда не является параметром или аргументом.
+        // РљРѕРјР°РЅРґР° РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РЅР°Р·РІР°РЅРёРµРј РєР»Р°СЃСЃР°, РїСЂРѕРІРµСЂРёРј РЅР° РґРѕРїСѓСЃС‚РёРјС‹Рµ СЃРёРјРІРѕР»С‹, С‚Р°РєР¶Рµ РѕРїСЂРµРґРµР»РёРј
+        // С‡С‚Рѕ РєРѕРјР°РЅРґР° РЅРµ СЏРІР»СЏРµС‚СЃСЏ РїР°СЂР°РјРµС‚СЂРѕРј РёР»Рё Р°СЂРіСѓРјРµРЅС‚РѕРј.
         if (!preg_match('/^([A-Za-z0-9_]*)$/', $command)) {
             throw new \Exception('The command is skipped or contains characters that are not supported');
         }
@@ -228,27 +228,27 @@ class cli_commands_handler
     }
     
     /**
-     * Пишем текст в поток
+     * РџРёС€РµРј С‚РµРєСЃС‚ РІ РїРѕС‚РѕРє
      *
      * @param string $text
-     * @param resource $stream по умолчанию пишем в STDOUT
+     * @param resource $stream РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРёС€РµРј РІ STDOUT
      */
     public static function cli_write($text, $stream = STDOUT) {
         fwrite($stream, $text);
     }
     
     /**
-     * Выводит текст за которым следует символ конца строки
+     * Р’С‹РІРѕРґРёС‚ С‚РµРєСЃС‚ Р·Р° РєРѕС‚РѕСЂС‹Рј СЃР»РµРґСѓРµС‚ СЃРёРјРІРѕР» РєРѕРЅС†Р° СЃС‚СЂРѕРєРё
      *
      * @param string $text
-     * @param resource $stream по умолчанию пишем в STDOUT
+     * @param resource $stream РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРёС€РµРј РІ STDOUT
      */
     public static function cli_writeln($text, $stream=STDOUT) {
         self::cli_write($text . PHP_EOL, $stream);
     }
     
     /**
-     * Описание)
+     * РћРїРёСЃР°РЅРёРµ)
      */
     private function header_def() {
         $t = '';
