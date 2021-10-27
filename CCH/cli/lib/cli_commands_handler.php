@@ -53,6 +53,11 @@ class cli_commands_handler
             $this->cli_writeln($e->getMessage());
             exit(0);
         }
+        // Проверим существование команды в приложении
+        if (!isset($commands[$this->command])) {
+            $this->cli_writeln('Сommand not found in declared commands of application');
+            exit(0);
+        }
         // Выполняет логику приложения
         $cliresponse = $commands[$this->command]->process(
             $this->args, $this->params, $this->command
